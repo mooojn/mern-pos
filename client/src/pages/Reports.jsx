@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { BarChart3 } from 'lucide-react';
 
 const Reports = () => {
     const [stats, setStats] = useState({ totalSales: 0, count: 0 });
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/reports', { withCredentials: true })
+        api.get('/reports')
             .then(res => setStats(res.data));
     }, []);
 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { useNavigate, Link } from 'react-router-dom';
 
 const Register = ({ onSuccess }) => {
@@ -14,7 +14,7 @@ const Register = ({ onSuccess }) => {
     const onSubmit = async e => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:5000/api/auth/register', formData);
+            const res = await api.post('/auth/register', formData);
             onSuccess(res.data);
             navigate('/settings'); // Redirect to settings to complete profile
         } catch (err) {

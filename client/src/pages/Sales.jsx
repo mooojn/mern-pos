@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { ShoppingCart } from 'lucide-react';
 
 const Sales = () => {
@@ -10,8 +10,8 @@ const Sales = () => {
     const fetchData = async () => {
         try {
             const [itemsRes, transRes] = await Promise.all([
-                axios.get('http://localhost:5000/api/items', { withCredentials: true }),
-                axios.get('http://localhost:5000/api/transactions', { withCredentials: true })
+                api.get('/items'),
+                api.get('/transactions')
             ]);
             setItems(itemsRes.data);
             setTransactions(transRes.data);
@@ -26,7 +26,7 @@ const Sales = () => {
         if (!selectedItem) return;
 
         try {
-            await axios.post('http://localhost:5000/api/transactions', {
+            await api.post('/transactions', {
                 ...saleData,
                 type: 'sale',
                 price: selectedItem.price

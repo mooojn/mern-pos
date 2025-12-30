@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { Plus, Trash2, Edit2, Search } from 'lucide-react';
 
 const Inventory = () => {
@@ -10,7 +10,7 @@ const Inventory = () => {
 
     const fetchItems = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/items', { withCredentials: true });
+            const res = await api.get('/items');
             setItems(res.data);
         } catch (err) {
             console.error(err);
@@ -24,7 +24,7 @@ const Inventory = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/items', formData, { withCredentials: true });
+            await api.post('/items', formData);
             setShowForm(false);
             setFormData({ name: '', price: '', quantity: '' });
             fetchItems();
@@ -35,7 +35,7 @@ const Inventory = () => {
 
     const handleDelete = async (id) => {
         if (confirm('Are you sure?')) {
-            await axios.delete(`http://localhost:5000/api/items/${id}`, { withCredentials: true });
+            await api.delete(`/items/${id}`);
             fetchItems();
         }
     };

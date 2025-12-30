@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { useNavigate, Link } from 'react-router-dom';
 
 const Login = ({ onSuccess }) => {
@@ -14,7 +14,7 @@ const Login = ({ onSuccess }) => {
     const onSubmit = async e => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:5000/api/auth/login', formData);
+            const res = await api.post('/auth/login', formData);
             onSuccess(res.data);
             if (res.data.role === 'admin') navigate('/admin');
             else navigate('/dashboard');

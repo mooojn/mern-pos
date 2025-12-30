@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { Save } from 'lucide-react';
 
 const Settings = () => {
@@ -8,7 +8,7 @@ const Settings = () => {
 
     useEffect(() => {
         // Ideally fetch current user profile here
-        axios.get('http://localhost:5000/api/auth/me', { withCredentials: true })
+        api.get('/auth/me')
             .then(res => {
                 const { contactEmail, phone, address } = res.data;
                 setFormData({ contactEmail: contactEmail || '', phone: phone || '', address: address || '' });
@@ -18,7 +18,7 @@ const Settings = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.put('http://localhost:5000/api/settings', formData, { withCredentials: true });
+            await api.put('/settings', formData);
             setMessage('Profile updated successfully!');
             setTimeout(() => setMessage(''), 3000);
         } catch (err) {

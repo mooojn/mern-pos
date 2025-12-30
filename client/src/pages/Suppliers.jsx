@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { Plus, Phone, Mail } from 'lucide-react';
 
 const Suppliers = () => {
@@ -9,7 +9,7 @@ const Suppliers = () => {
 
     const fetchSuppliers = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/suppliers', { withCredentials: true });
+            const res = await api.get('/suppliers');
             setSuppliers(res.data);
         } catch (err) { console.error(err); }
     };
@@ -18,7 +18,7 @@ const Suppliers = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await axios.post('http://localhost:5000/api/suppliers', formData, { withCredentials: true });
+        await api.post('/suppliers', formData);
         setShowForm(false);
         setFormData({ name: '', contact: '', email: '' });
         fetchSuppliers();
