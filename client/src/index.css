@@ -1,1 +1,37 @@
 @import "tailwindcss";
+
+@layer utilities {
+    .perspective-1000 {
+        perspective: 1000px;
+    }
+
+    .rotate-y-\[-6deg\] {
+        transform: rotateY(-6deg);
+    }
+
+    .rotate-y-\[-2deg\] {
+        transform: rotateY(-2deg);
+    }
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+.animation-delay-2000 {
+    animation-delay: 2s;
+}
