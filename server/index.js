@@ -43,7 +43,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api', apiRoutes);
 
 app.get('/', (req, res) => {
-    res.send('Inventory API Running...');
+    res.send('BIZ-KEEP server running...');
 });
 
 if (process.env.NODE_ENV !== 'production') {
