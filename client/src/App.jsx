@@ -14,6 +14,8 @@ import Suppliers from './pages/Suppliers';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 
+import LandingPage from './pages/LandingPage';
+
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -55,11 +57,11 @@ function App() {
     <Router>
       <Routes>
         {/* Public Routes */}
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={!user ? <Login onSuccess={setUser} /> : <Navigate to="/dashboard" />} />
         <Route path="/register" element={!user ? <Register onSuccess={setUser} /> : <Navigate to="/dashboard" />} />
 
         {/* Protected Routes */}
-        <Route path="/" element={<Navigate to="/dashboard" />} />
         <Route path="/dashboard" element={<ProtectedRoute><Inventory /></ProtectedRoute>} /> {/* Default to inventory for now */}
         <Route path="/inventory" element={<ProtectedRoute><Inventory /></ProtectedRoute>} />
         <Route path="/sales" element={<ProtectedRoute><Sales /></ProtectedRoute>} />
