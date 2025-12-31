@@ -24,6 +24,9 @@ mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('✅ MongoDB Connected'))
     .catch(err => console.error('❌ MongoDB Connection Error:', err));
 
+// Trust proxy for Vercel (required for secure cookies behind reverse proxy)
+app.set('trust proxy', 1);
+
 // Session Setup
 app.use(session({
     secret: process.env.SESSION_SECRET || 'inventory_secret_key',
