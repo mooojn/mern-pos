@@ -38,6 +38,15 @@ const Sales = () => {
             alert(err.response?.data?.message || 'Error processing sale');
         }
     };
+    const handleVoid = async (id) => {
+        if (!confirm('Are you sure you want to void this transaction? This will restore the inventory.')) return;
+        try {
+            await api.delete(`/transactions/${id}`);
+            fetchData();
+        } catch (err) {
+            alert(err.response?.data?.message || 'Error voiding transaction');
+        }
+    };
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -95,6 +104,7 @@ const Sales = () => {
                                     <th className="p-3">Qty</th>
                                     <th className="p-3 text-right">Total</th>
                                     <th className="p-3 text-right">Date</th>
+                                    <th className="p-3 text-right">Action</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
@@ -111,10 +121,18 @@ const Sales = () => {
                                         <td className="p-3 text-right text-gray-400 text-sm">
                                             {new Date(t.date).toLocaleDateString()}
                                         </td>
+                                        <td className="p-3 text-right">
+                                            <button
+                                                onClick={() => handleVoid(t._id)}
+                                                className="text-xs text-red-500 hover:text-red-700 underline"
+                                            >
+                                                Void
+                                            </button>
+                                        </td>
                                     </tr>
                                 ))}
                                 {transactions.length === 0 && (
-                                    <tr><td colSpan="5" className="p-8 text-center text-gray-500">No transactions recorded</td></tr>
+                                    <tr><td colSpan="6" className="p-8 text-center text-gray-500">No transactions recorded</td></tr>
                                 )}
                             </tbody>
                         </table>
