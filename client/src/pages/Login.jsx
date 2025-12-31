@@ -17,7 +17,7 @@ const Login = ({ onSuccess }) => {
             const res = await api.post('/auth/login', formData);
             onSuccess(res.data);
             if (res.data.role === 'admin') navigate('/admin');
-            else navigate('/dashboard');
+            else navigate('/inventory');
         } catch (err) {
             setError(err.response?.data?.message || 'Login failed');
         }
