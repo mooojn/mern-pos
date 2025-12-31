@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../api';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Trash2 } from 'lucide-react';
 
 const Sales = () => {
     const [items, setItems] = useState([]);
@@ -38,6 +38,7 @@ const Sales = () => {
             alert(err.response?.data?.message || 'Error processing sale');
         }
     };
+
     const handleVoid = async (id) => {
         if (!confirm('Are you sure you want to void this transaction? This will restore the inventory.')) return;
         try {
@@ -49,94 +50,118 @@ const Sales = () => {
     };
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="space-y-6">
             {/* New Sale Form */}
-            <div className="lg:col-span-1">
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                        <ShoppingCart className="text-blue-600" /> New Sale
-                    </h2>
-                    <form onSubmit={handleSale} className="space-y-4">
-                        <div>
-                            <label className="block text-sm font-medium mb-1">Select Item</label>
-                            <select
-                                className="w-full border p-2 rounded-lg"
-                                value={saleData.itemId}
-                                onChange={e => setSaleData({ ...saleData, itemId: e.target.value })}
-                                required
-                            >
-                                <option value="">-- Choose Item --</option>
-                                {items.map(item => (
-                                    <option key={item._id} value={item._id}>
-                                        {item.name} (${item.price}) - {item.quantity} left
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium mb-1">Quantity</label>
-                            <input
-                                type="number"
-                                className="w-full border p-2 rounded-lg"
-                                value={saleData.quantity}
-                                onChange={e => setSaleData({ ...saleData, quantity: e.target.value })}
-                                required
-                                min="1"
-                            />
-                        </div>
-                        <button className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition">
-                            Record Sale
-                        </button>
-                    </form>
-                </div>
+            <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-gray-100">
+                <h2 className="text-lg md:text-xl font-bold mb-4 flex items-center gap-2">
+                    <ShoppingCart className="text-blue-600" size={20} /> New Sale
+                </h2>
+                <form onSubmit={handleSale} className="space-y-4">
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Select Item</label>
+                        <select
+                            className="w-full border p-2 rounded-lg"
+                            value={saleData.itemId}
+                            onChange={e => setSaleData({ ...saleData, itemId: e.target.value })}
+                            required
+                        >
+                            <option value="">-- Choose Item --</option>
+                            {items.map(item => (
+                                <option key={item._id} value={item._id}>
+                                    {item.name} (${item.price}) - {item.quantity} left
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Quantity</label>
+                        <input
+                            type="number"
+                            className="w-full border p-2 rounded-lg"
+                            value={saleData.quantity}
+                            onChange={e => setSaleData({ ...saleData, quantity: e.target.value })}
+                            required
+                            min="1"
+                        />
+                    </div>
+                    <button className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition">
+                        Record Sale
+                    </button>
+                </form>
             </div>
 
             {/* Transaction History */}
-            <div className="lg:col-span-2">
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <h2 className="p-4 border-b border-gray-100 text-lg font-semibold bg-gray-50">Recent Transactions</h2>
-                    <div className="overflow-y-auto max-h-[600px]">
-                        <table className="w-full text-left">
-                            <thead className="bg-gray-50 text-gray-500 text-xs uppercase">
-                                <tr>
-                                    <th className="p-3">Type</th>
-                                    <th className="p-3">Item</th>
-                                    <th className="p-3">Qty</th>
-                                    <th className="p-3 text-right">Total</th>
-                                    <th className="p-3 text-right">Date</th>
-                                    <th className="p-3 text-right">Action</th>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <h2 className="p-4 border-b border-gray-100 text-lg font-semibold bg-gray-50">Recent Transactions</h2>
+
+                {/* Desktop Table View */}
+                <div className="hidden md:block overflow-x-auto">
+                    <table className="w-full text-left">
+                        <thead className="bg-gray-50 text-gray-500 text-xs uppercase">
+                            <tr>
+                                <th className="p-3">Type</th>
+                                <th className="p-3">Item</th>
+                                <th className="p-3">Qty</th>
+                                <th className="p-3 text-right">Total</th>
+                                <th className="p-3 text-right">Date</th>
+                                <th className="p-3 text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100">
+                            {transactions.map(t => (
+                                <tr key={t._id}>
+                                    <td className="p-3">
+                                        <span className={`text-xs px-2 py-1 rounded font-bold ${t.type === 'sale' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
+                                            {t.type.toUpperCase()}
+                                        </span>
+                                    </td>
+                                    <td className="p-3 font-medium">{t.itemId?.name || 'Unknown'}</td>
+                                    <td className="p-3">{t.quantity}</td>
+                                    <td className="p-3 text-right font-semibold">${t.totalAmount}</td>
+                                    <td className="p-3 text-right text-gray-400 text-sm">
+                                        {new Date(t.date).toLocaleDateString()}
+                                    </td>
+                                    <td className="p-3 text-right">
+                                        <button onClick={() => handleVoid(t._id)} className="text-xs text-red-500 hover:text-red-700 underline">
+                                            Void
+                                        </button>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-100">
-                                {transactions.map(t => (
-                                    <tr key={t._id}>
-                                        <td className="p-3">
-                                            <span className={`text-xs px-2 py-1 rounded font-bold ${t.type === 'sale' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
-                                                {t.type.toUpperCase()}
-                                            </span>
-                                        </td>
-                                        <td className="p-3 font-medium">{t.itemId?.name || 'Unknown'}</td>
-                                        <td className="p-3">{t.quantity}</td>
-                                        <td className="p-3 text-right font-semibold">${t.totalAmount}</td>
-                                        <td className="p-3 text-right text-gray-400 text-sm">
-                                            {new Date(t.date).toLocaleDateString()}
-                                        </td>
-                                        <td className="p-3 text-right">
-                                            <button
-                                                onClick={() => handleVoid(t._id)}
-                                                className="text-xs text-red-500 hover:text-red-700 underline"
-                                            >
-                                                Void
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                                {transactions.length === 0 && (
-                                    <tr><td colSpan="6" className="p-8 text-center text-gray-500">No transactions recorded</td></tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
+                            ))}
+                            {transactions.length === 0 && (
+                                <tr><td colSpan="6" className="p-8 text-center text-gray-500">No transactions recorded</td></tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden divide-y divide-gray-100">
+                    {transactions.map(t => (
+                        <div key={t._id} className="p-4">
+                            <div className="flex justify-between items-start mb-2">
+                                <div>
+                                    <span className={`text-xs px-2 py-1 rounded font-bold ${t.type === 'sale' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
+                                        {t.type.toUpperCase()}
+                                    </span>
+                                    <h3 className="font-semibold text-gray-800 mt-1">{t.itemId?.name || 'Unknown'}</h3>
+                                </div>
+                                <button onClick={() => handleVoid(t._id)} className="p-2 text-red-500 hover:bg-red-50 rounded">
+                                    <Trash2 size={16} />
+                                </button>
+                            </div>
+                            <div className="flex justify-between items-center text-sm text-gray-500">
+                                <span>Qty: {t.quantity}</span>
+                                <span className="font-semibold text-gray-800">${t.totalAmount}</span>
+                            </div>
+                            <div className="text-xs text-gray-400 mt-1">
+                                {new Date(t.date).toLocaleDateString()}
+                            </div>
+                        </div>
+                    ))}
+                    {transactions.length === 0 && (
+                        <div className="p-8 text-center text-gray-500">No transactions recorded</div>
+                    )}
                 </div>
             </div>
         </div>

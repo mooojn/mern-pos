@@ -53,7 +53,7 @@ const AdminPanel = () => {
         setEditingBusiness(business);
         setFormData({
             name: business.name || '',
-            password: '', // Don't populate password
+            password: '',
             contactEmail: business.contactEmail || '',
             phone: business.phone || '',
             address: business.address || ''
@@ -83,15 +83,15 @@ const AdminPanel = () => {
 
     return (
         <div>
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold text-gray-800">Admin Panel - All Businesses</h1>
-                <div className="flex items-center gap-4">
-                    <div className="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-semibold">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                <h1 className="text-xl md:text-2xl font-bold text-gray-800">Admin Panel</h1>
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
+                    <div className="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-semibold text-center">
                         {businesses.length} Registered
                     </div>
                     <button
                         onClick={() => setShowForm(true)}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
+                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2"
                     >
                         <Plus size={18} /> Add Business
                     </button>
@@ -100,10 +100,10 @@ const AdminPanel = () => {
 
             {/* Add/Edit Form Modal */}
             {showForm && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-xl shadow-xl border border-gray-100 w-full max-w-md animate-in zoom-in-95">
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white p-4 md:p-6 rounded-xl shadow-xl border border-gray-100 w-full max-w-md max-h-[90vh] overflow-y-auto">
                         <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-xl font-bold">{editingBusiness ? 'Edit Business' : 'Add New Business'}</h2>
+                            <h2 className="text-lg md:text-xl font-bold">{editingBusiness ? 'Edit Business' : 'Add New Business'}</h2>
                             <button onClick={closeForm} className="p-1 hover:bg-gray-100 rounded-full"><X size={20} /></button>
                         </div>
                         <form onSubmit={handleSubmit} className="space-y-4">
@@ -153,9 +153,9 @@ const AdminPanel = () => {
                                     onChange={e => setFormData({ ...formData, address: e.target.value })}
                                 />
                             </div>
-                            <div className="flex justify-end gap-2 mt-6">
-                                <button type="button" onClick={closeForm} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
-                                <button type="submit" className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            <div className="flex flex-col sm:flex-row justify-end gap-2 mt-6">
+                                <button type="button" onClick={closeForm} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg order-2 sm:order-1">Cancel</button>
+                                <button type="submit" className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 order-1 sm:order-2">
                                     {editingBusiness ? 'Update' : 'Create Business'}
                                 </button>
                             </div>
@@ -176,17 +176,17 @@ const AdminPanel = () => {
                     </button>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
                     {businesses.map(business => (
                         <div key={business._id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition group">
-                            <div className="p-6">
-                                <div className="flex justify-between items-start mb-4">
-                                    <div>
-                                        <h3 className="text-lg font-bold text-gray-800">{business.name}</h3>
-                                        <p className="text-sm text-gray-500">{business.contactEmail || 'No email'}</p>
+                            <div className="p-4 md:p-6">
+                                <div className="flex justify-between items-start mb-3">
+                                    <div className="min-w-0 flex-1">
+                                        <h3 className="text-lg font-bold text-gray-800 truncate">{business.name}</h3>
+                                        <p className="text-sm text-gray-500 truncate">{business.contactEmail || 'No email'}</p>
                                         {business.phone && <p className="text-sm text-gray-400">{business.phone}</p>}
                                     </div>
-                                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <div className="flex gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity ml-2">
                                         <button
                                             onClick={() => handleEdit(business)}
                                             className="p-2 text-blue-500 hover:bg-blue-50 rounded-lg"
@@ -204,31 +204,31 @@ const AdminPanel = () => {
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-3 gap-3 mt-4">
-                                    <div className="bg-blue-50 p-3 rounded-lg text-center">
-                                        <Package size={18} className="mx-auto text-blue-600 mb-1" />
-                                        <p className="text-lg font-bold text-blue-900">{business.stats.items}</p>
+                                <div className="grid grid-cols-3 gap-2 md:gap-3">
+                                    <div className="bg-blue-50 p-2 md:p-3 rounded-lg text-center">
+                                        <Package size={16} className="mx-auto text-blue-600 mb-1" />
+                                        <p className="text-base md:text-lg font-bold text-blue-900">{business.stats.items}</p>
                                         <p className="text-xs text-blue-600">Items</p>
                                     </div>
-                                    <div className="bg-green-50 p-3 rounded-lg text-center">
-                                        <ShoppingCart size={18} className="mx-auto text-green-600 mb-1" />
-                                        <p className="text-lg font-bold text-green-900">{business.stats.transactions}</p>
+                                    <div className="bg-green-50 p-2 md:p-3 rounded-lg text-center">
+                                        <ShoppingCart size={16} className="mx-auto text-green-600 mb-1" />
+                                        <p className="text-base md:text-lg font-bold text-green-900">{business.stats.transactions}</p>
                                         <p className="text-xs text-green-600">Sales</p>
                                     </div>
-                                    <div className="bg-purple-50 p-3 rounded-lg text-center">
-                                        <Users size={18} className="mx-auto text-purple-600 mb-1" />
-                                        <p className="text-lg font-bold text-purple-900">{business.stats.suppliers}</p>
+                                    <div className="bg-purple-50 p-2 md:p-3 rounded-lg text-center">
+                                        <Users size={16} className="mx-auto text-purple-600 mb-1" />
+                                        <p className="text-base md:text-lg font-bold text-purple-900">{business.stats.suppliers}</p>
                                         <p className="text-xs text-purple-600">Suppliers</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="bg-gray-50 px-6 py-3 border-t border-gray-100 flex justify-between items-center">
+                            <div className="bg-gray-50 px-4 md:px-6 py-3 border-t border-gray-100 flex flex-wrap justify-between items-center gap-2">
                                 <span className={`text-xs font-semibold px-2 py-1 rounded ${business.isProfileComplete ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
-                                    {business.isProfileComplete ? 'Profile Complete' : 'Incomplete Profile'}
+                                    {business.isProfileComplete ? 'Complete' : 'Incomplete'}
                                 </span>
                                 <span className="text-xs text-gray-400">
-                                    Joined {new Date(business.createdAt).toLocaleDateString()}
+                                    {new Date(business.createdAt).toLocaleDateString()}
                                 </span>
                             </div>
                         </div>

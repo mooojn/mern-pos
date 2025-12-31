@@ -60,11 +60,11 @@ const Inventory = () => {
 
     return (
         <div>
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold text-gray-800">Inventory Management</h1>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                <h1 className="text-xl md:text-2xl font-bold text-gray-800">Inventory Management</h1>
                 <button
                     onClick={() => setShowForm(true)}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition"
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition w-full sm:w-auto justify-center"
                 >
                     <Plus size={18} /> Add Item
                 </button>
@@ -72,7 +72,7 @@ const Inventory = () => {
 
             {/* Add/Edit Form Modal */}
             {showForm && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                     <div className="bg-white p-6 rounded-xl shadow-xl border border-gray-100 w-full max-w-md animate-in zoom-in-95">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-xl font-bold">{editingId ? 'Edit Item' : 'Add New Item'}</h2>
@@ -109,9 +109,9 @@ const Inventory = () => {
                                     required
                                 />
                             </div>
-                            <div className="flex justify-end gap-2 mt-6">
-                                <button type="button" onClick={closeForm} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
-                                <button type="submit" className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            <div className="flex flex-col sm:flex-row justify-end gap-2 mt-6">
+                                <button type="button" onClick={closeForm} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg order-2 sm:order-1">Cancel</button>
+                                <button type="submit" className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 order-1 sm:order-2">
                                     {editingId ? 'Update Item' : 'Save Item'}
                                 </button>
                             </div>
@@ -132,48 +132,74 @@ const Inventory = () => {
                         />
                     </div>
                 </div>
-                <table className="w-full text-left">
-                    <thead className="bg-gray-50 text-gray-600 text-sm">
-                        <tr>
-                            <th className="p-4">Name</th>
-                            <th className="p-4">Price</th>
-                            <th className="p-4">Quantity</th>
-                            <th className="p-4 text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                        {filteredItems.map(item => (
-                            <tr key={item._id} className="hover:bg-gray-50 transition">
-                                <td className="p-4 font-medium">{item.name}</td>
-                                <td className="p-4">${item.price}</td>
-                                <td className="p-4">
-                                    <span className={`px-2 py-1 rounded text-xs font-semibold ${item.quantity < 10 ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>
-                                        {item.quantity} units
-                                    </span>
-                                </td>
-                                <td className="p-4 text-right flex justify-end gap-2">
-                                    <button
-                                        onClick={() => handleEdit(item)}
-                                        className="p-2 text-blue-600 hover:bg-blue-50 rounded"
-                                    >
+
+                {/* Desktop Table View */}
+                <div className="hidden md:block overflow-x-auto">
+                    <table className="w-full text-left">
+                        <thead className="bg-gray-50 text-gray-600 text-sm">
+                            <tr>
+                                <th className="p-4">Name</th>
+                                <th className="p-4">Price</th>
+                                <th className="p-4">Quantity</th>
+                                <th className="p-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100">
+                            {filteredItems.map(item => (
+                                <tr key={item._id} className="hover:bg-gray-50 transition">
+                                    <td className="p-4 font-medium">{item.name}</td>
+                                    <td className="p-4">${item.price}</td>
+                                    <td className="p-4">
+                                        <span className={`px-2 py-1 rounded text-xs font-semibold ${item.quantity < 10 ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>
+                                            {item.quantity} units
+                                        </span>
+                                    </td>
+                                    <td className="p-4 text-right flex justify-end gap-2">
+                                        <button onClick={() => handleEdit(item)} className="p-2 text-blue-600 hover:bg-blue-50 rounded">
+                                            <Edit2 size={16} />
+                                        </button>
+                                        <button onClick={() => handleDelete(item._id)} className="p-2 text-red-600 hover:bg-red-50 rounded">
+                                            <Trash2 size={16} />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                            {filteredItems.length === 0 && (
+                                <tr>
+                                    <td colSpan="4" className="p-8 text-center text-gray-500">No items found</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden divide-y divide-gray-100">
+                    {filteredItems.map(item => (
+                        <div key={item._id} className="p-4">
+                            <div className="flex justify-between items-start mb-2">
+                                <h3 className="font-semibold text-gray-800">{item.name}</h3>
+                                <div className="flex gap-1">
+                                    <button onClick={() => handleEdit(item)} className="p-2 text-blue-600 hover:bg-blue-50 rounded">
                                         <Edit2 size={16} />
                                     </button>
-                                    <button
-                                        onClick={() => handleDelete(item._id)}
-                                        className="p-2 text-red-600 hover:bg-red-50 rounded"
-                                    >
+                                    <button onClick={() => handleDelete(item._id)} className="p-2 text-red-600 hover:bg-red-50 rounded">
                                         <Trash2 size={16} />
                                     </button>
-                                </td>
-                            </tr>
-                        ))}
-                        {filteredItems.length === 0 && (
-                            <tr>
-                                <td colSpan="4" className="p-8 text-center text-gray-500">No items found</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+                                </div>
+                            </div>
+                            <div className="flex justify-between items-center text-sm">
+                                <span className="text-gray-500">Price: <span className="font-medium text-gray-800">${item.price}</span></span>
+                                <span className={`px-2 py-1 rounded text-xs font-semibold ${item.quantity < 10 ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>
+                                    {item.quantity} units
+                                </span>
+                            </div>
+                        </div>
+                    ))}
+                    {filteredItems.length === 0 && (
+                        <div className="p-8 text-center text-gray-500">No items found</div>
+                    )}
+                </div>
             </div>
         </div>
     );
