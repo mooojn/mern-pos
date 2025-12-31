@@ -27,7 +27,7 @@ const Navbar = () => {
                 <div>
                     {token ? (
                         <>
-                            <Link to="/dashboard" className="mr-4 hover:underline">Dashboard</Link>
+                            <Link to="/inventory" className="mr-4 hover:underline">Dashboard</Link>
                             {userRole === 'admin' && (
                                 <Link to="/admin" className="mr-4 hover:underline text-yellow-300">Admin Panel</Link>
                             )}
