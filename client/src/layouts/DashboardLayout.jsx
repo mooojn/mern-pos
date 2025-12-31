@@ -5,8 +5,8 @@ const SidebarItem = ({ to, icon: Icon, label, active }) => (
     <Link
         to={to}
         className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${active
-                ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'
-                : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
+            ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'
+            : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
             }`}
     >
         <Icon size={20} />
@@ -32,7 +32,6 @@ const DashboardLayout = ({ children, onLogout, user }) => {
                     <p className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 mt-4">Overview</p>
                     {!isAdmin && (
                         <>
-                            <SidebarItem to="/dashboard" icon={LayoutDashboard} label="Dashboard" active={location.pathname === '/dashboard'} />
                             <SidebarItem to="/inventory" icon={Package} label="Inventory" active={location.pathname === '/inventory'} />
                             <SidebarItem to="/sales" icon={ShoppingCart} label="Sales" active={location.pathname === '/sales'} />
                             <SidebarItem to="/suppliers" icon={Users} label="Suppliers" active={location.pathname === '/suppliers'} />

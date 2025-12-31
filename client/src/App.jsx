@@ -13,6 +13,7 @@ import Sales from './pages/Sales';
 import Suppliers from './pages/Suppliers';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
+import AdminPanel from './pages/AdminPanel';
 
 import LandingPage from './pages/LandingPage';
 
@@ -58,19 +59,19 @@ function App() {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={!user ? <Login onSuccess={setUser} /> : <Navigate to="/dashboard" />} />
-        <Route path="/register" element={!user ? <Register onSuccess={setUser} /> : <Navigate to="/dashboard" />} />
+        <Route path="/login" element={!user ? <Login onSuccess={setUser} /> : <Navigate to={user?.role === 'admin' ? '/admin' : '/inventory'} />} />
+        <Route path="/register" element={!user ? <Register onSuccess={setUser} /> : <Navigate to="/inventory" />} />
 
         {/* Protected Routes */}
-        <Route path="/dashboard" element={<ProtectedRoute><Inventory /></ProtectedRoute>} /> {/* Default to inventory for now */}
+        {/* <Route path="/dashboard" element={<Navigate to="/inventory" replace />} /> */}
         <Route path="/inventory" element={<ProtectedRoute><Inventory /></ProtectedRoute>} />
         <Route path="/sales" element={<ProtectedRoute><Sales /></ProtectedRoute>} />
         <Route path="/suppliers" element={<ProtectedRoute><Suppliers /></ProtectedRoute>} />
         <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
 
-        {/* Admin Route Placeholder */}
-        <Route path="/admin" element={<ProtectedRoute><h1 className="text-2xl font-bold">Admin Overview (Coming Soon)</h1></ProtectedRoute>} />
+        {/* Admin Route */}
+        <Route path="/admin" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
       </Routes>
     </Router>
   );
